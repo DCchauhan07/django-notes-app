@@ -12,6 +12,12 @@ services:
       - django_app
     networks:
       - notes-app-nw
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   django_app:
     build:
@@ -35,22 +41,23 @@ services:
     networks:
       - notes-app-nw
 
-  #db:
-    #image: mysql
-    #container_name: "db_cont"
-    #environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=test_db
-    #volumes:
-      - ./data/mysql/db:/var/lib/mysql
-    #healthcheck:
-      #test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
-      #interval: 10s
-      #timeout: 5s
-      #retries: 5
-      #start_period: 60s
-    #networks:
-      - notes-app-nw
+  # Uncomment if you want the database
+  # db:
+  #   image: mysql
+  #   container_name: "db_cont"
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=root
+  #     - MYSQL_DATABASE=test_db
+  #   volumes:
+  #     - ./data/mysql/db:/var/lib/mysql
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 60s
+  #   networks:
+  #     - notes-app-nw
 
   watcher:
     image: alpine:latest
