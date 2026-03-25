@@ -52,5 +52,17 @@ services:
     #networks:
       - notes-app-nw
 
+  watcher:
+    image: alpine:latest
+    container_name: "watcher_cont"
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/workspace
+    working_dir: /workspace
+    command: sh -c "while true; do sleep 30; done"
+    networks:
+      - notes-app-nw
+
 networks:
   notes-app-nw:
